@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:clean_architecture_cubit/data/models/results_model.dart';
 import 'package:clean_architecture_cubit/domain/entities/results.dart';
 import 'package:hive/hive.dart';
 
@@ -16,10 +15,12 @@ class LocalDataSourceImpl extends LocalDataSource {
   Future<void>? cacheMovies(List<Results> results) async {
     await Hive.openBox<Results>(topRatedMoviesKey);
     final box = Hive.box<Results>(topRatedMoviesKey);
-    box.clear();
-    for (var movie in results) {
-      box.add(movie);
+    if (results.length <= 80) {
+      for (var movie in results) {
+        box.add(movie);
+      }
     }
+    log(box.values.length.toString());
     log('Movies saved');
     // Hive.close();
   }

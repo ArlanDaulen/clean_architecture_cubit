@@ -2,8 +2,8 @@ import 'package:clean_architecture_cubit/domain/entities/results.dart';
 import 'package:clean_architecture_cubit/presentation/home/ui/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import 'injection_container.dart' as di;
 
@@ -11,7 +11,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(ResultsAdapter());
-  // Hive.openBox<Results>('top_rated_movies');
+  if (await InternetConnectionChecker().hasConnection) {
+   await Hive.openBox<Results>('top_rated_movies');
+    final box = Hive.box<Results>('top_rated_movies');
+    box.clear();
+  }
   await di.init();
   runApp(const MyApp());
 }

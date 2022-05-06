@@ -20,7 +20,7 @@ mixin _$HomeState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Results> movies, int currentPage) laoded,
+    required TResult Function(List<Results> movies) laoded,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$HomeState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Results> movies, int currentPage)? laoded,
+    TResult Function(List<Results> movies)? laoded,
     TResult Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$HomeState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Results> movies, int currentPage)? laoded,
+    TResult Function(List<Results> movies)? laoded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -123,7 +123,7 @@ class _$_Initial implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Results> movies, int currentPage) laoded,
+    required TResult Function(List<Results> movies) laoded,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -134,7 +134,7 @@ class _$_Initial implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Results> movies, int currentPage)? laoded,
+    TResult Function(List<Results> movies)? laoded,
     TResult Function(String message)? error,
   }) {
     return initial?.call();
@@ -145,7 +145,7 @@ class _$_Initial implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Results> movies, int currentPage)? laoded,
+    TResult Function(List<Results> movies)? laoded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -237,7 +237,7 @@ class _$_Loading implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Results> movies, int currentPage) laoded,
+    required TResult Function(List<Results> movies) laoded,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -248,7 +248,7 @@ class _$_Loading implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Results> movies, int currentPage)? laoded,
+    TResult Function(List<Results> movies)? laoded,
     TResult Function(String message)? error,
   }) {
     return loading?.call();
@@ -259,7 +259,7 @@ class _$_Loading implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Results> movies, int currentPage)? laoded,
+    TResult Function(List<Results> movies)? laoded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -315,7 +315,7 @@ abstract class _Loading implements HomeState {
 abstract class _$LoadedCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
       __$LoadedCopyWithImpl<$Res>;
-  $Res call({List<Results> movies, int currentPage});
+  $Res call({List<Results> movies});
 }
 
 /// @nodoc
@@ -330,17 +330,12 @@ class __$LoadedCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? movies = freezed,
-    Object? currentPage = freezed,
   }) {
     return _then(_Loaded(
       movies == freezed
           ? _value.movies
           : movies // ignore: cast_nullable_to_non_nullable
               as List<Results>,
-      currentPage == freezed
-          ? _value.currentPage
-          : currentPage // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
@@ -348,8 +343,7 @@ class __$LoadedCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Loaded implements _Loaded {
-  const _$_Loaded(final List<Results> movies, this.currentPage)
-      : _movies = movies;
+  const _$_Loaded(final List<Results> movies) : _movies = movies;
 
   final List<Results> _movies;
   @override
@@ -359,11 +353,8 @@ class _$_Loaded implements _Loaded {
   }
 
   @override
-  final int currentPage;
-
-  @override
   String toString() {
-    return 'HomeState.laoded(movies: $movies, currentPage: $currentPage)';
+    return 'HomeState.laoded(movies: $movies)';
   }
 
   @override
@@ -371,16 +362,12 @@ class _$_Loaded implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            const DeepCollectionEquality().equals(other.movies, movies) &&
-            const DeepCollectionEquality()
-                .equals(other.currentPage, currentPage));
+            const DeepCollectionEquality().equals(other.movies, movies));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(movies),
-      const DeepCollectionEquality().hash(currentPage));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(movies));
 
   @JsonKey(ignore: true)
   @override
@@ -392,10 +379,10 @@ class _$_Loaded implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Results> movies, int currentPage) laoded,
+    required TResult Function(List<Results> movies) laoded,
     required TResult Function(String message) error,
   }) {
-    return laoded(movies, currentPage);
+    return laoded(movies);
   }
 
   @override
@@ -403,10 +390,10 @@ class _$_Loaded implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Results> movies, int currentPage)? laoded,
+    TResult Function(List<Results> movies)? laoded,
     TResult Function(String message)? error,
   }) {
-    return laoded?.call(movies, currentPage);
+    return laoded?.call(movies);
   }
 
   @override
@@ -414,12 +401,12 @@ class _$_Loaded implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Results> movies, int currentPage)? laoded,
+    TResult Function(List<Results> movies)? laoded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (laoded != null) {
-      return laoded(movies, currentPage);
+      return laoded(movies);
     }
     return orElse();
   }
@@ -463,11 +450,9 @@ class _$_Loaded implements _Loaded {
 }
 
 abstract class _Loaded implements HomeState {
-  const factory _Loaded(final List<Results> movies, final int currentPage) =
-      _$_Loaded;
+  const factory _Loaded(final List<Results> movies) = _$_Loaded;
 
   List<Results> get movies => throw _privateConstructorUsedError;
-  int get currentPage => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }
@@ -536,7 +521,7 @@ class _$_Error implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Results> movies, int currentPage) laoded,
+    required TResult Function(List<Results> movies) laoded,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -547,7 +532,7 @@ class _$_Error implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Results> movies, int currentPage)? laoded,
+    TResult Function(List<Results> movies)? laoded,
     TResult Function(String message)? error,
   }) {
     return error?.call(message);
@@ -558,7 +543,7 @@ class _$_Error implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Results> movies, int currentPage)? laoded,
+    TResult Function(List<Results> movies)? laoded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {

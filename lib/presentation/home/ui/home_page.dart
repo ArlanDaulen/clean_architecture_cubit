@@ -10,8 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:shimmer/shimmer.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   static final _cacheManager = CacheManager(
@@ -22,6 +23,19 @@ class HomePage extends StatelessWidget {
   );
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int page = 1;
+
+  nextPage() {
+    setState(() {
+      page++;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => HomeCubit(repository: sl()),
@@ -30,6 +44,7 @@ class HomePage extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
+              backgroundColor: const Color(0xff032541),
               title: const Text('Top Rated Movies'),
               centerTitle: true,
             ),
@@ -38,12 +53,91 @@ class HomePage extends StatelessWidget {
             //   child: const Icon(Icons.download),
             // ),
             body: state.maybeWhen(
-              orElse: () {},
-              initial: () => const Center(
-                child: Text('Press Button To Load Movies'),
-              ),
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
+              orElse: () {
+                return null;
+              },
+              loading: () => ListView.separated(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 20,
+                ),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 3,
+                separatorBuilder: (_, index) => const SizedBox(
+                  height: 15,
+                ),
+                itemBuilder: (_, index) => SizedBox(
+                  width: double.maxFinite,
+                  height: 150,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Shimmer.fromColors(
+                        child: Container(
+                          color: Colors.white,
+                          width: 100,
+                          height: 150,
+                        ),
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Shimmer.fromColors(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                width: double.maxFinite,
+                                height: 20,
+                              ),
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Shimmer.fromColors(
+                              child: Container(
+                                width: 60,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Expanded(
+                              child: Shimmer.fromColors(
+                                child: Container(
+                                  width: double.maxFinite,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               error: (message) => Center(
                 child: Text(
@@ -53,12 +147,12 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              laoded: (movies, currentPage) => LazyLoadScrollView(
+              laoded: (movies) => LazyLoadScrollView(
                 onEndOfPage: () {
-                  log('${currentPage.runtimeType}: $currentPage');
-                  context.read<HomeCubit>().loadMore(currentPage + 1);
+                  nextPage();
+                  context.read<HomeCubit>().loadMore(page);
                 },
-                child: Scrollbar(
+                child: CupertinoScrollbar(
                   child: ListView.separated(
                     // controller: scrollController,
                     shrinkWrap: true,
@@ -67,7 +161,6 @@ class HomePage extends StatelessWidget {
                       vertical: 15,
                       horizontal: 20,
                     ),
-                    // itemCount: di.cubit.movie!.results!.length,
                     itemCount: movies.length,
                     separatorBuilder: (_, index) => const Divider(),
                     itemBuilder: (_, index) => GestureDetector(
@@ -83,17 +176,21 @@ class HomePage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CachedNetworkImage(
-                            cacheManager: _cacheManager,
+                            cacheManager: HomePage._cacheManager,
                             imageUrl: 'http://image.tmdb.org/t/p/w500' +
                                 movies[index].posterPath!,
                             width: 100,
                             height: 150,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => const SizedBox(
-                              width: 100,
-                              height: 150,
-                              child: Center(
-                                child: CircularProgressIndicator(),
+                            placeholder: (context, url) => Center(
+                              child: Shimmer.fromColors(
+                                child: Container(
+                                  color: Colors.white,
+                                  width: 100,
+                                  height: 150,
+                                ),
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
                               ),
                             ),
                             errorWidget: (context, url, error) => Container(
@@ -101,14 +198,7 @@ class HomePage extends StatelessWidget {
                               height: 150,
                               color: Colors.grey.withOpacity(0.5),
                             ),
-
-                            // maxHeightDiskCache: 75,
                           ),
-                          // Image.network(
-                          //   'http://image.tmdb.org/t/p/w500' +
-                          //       movies[index].posterPath!,
-                          //   width: MediaQuery.of(context).size.width * 0.3,
-                          // ),
                           const SizedBox(
                             width: 10,
                           ),
